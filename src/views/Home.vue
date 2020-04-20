@@ -125,7 +125,7 @@ export default {
           if (res.status != 200) {
             this.joinErrorMsg = "未知错误";
             console.log(res);
-          } else if (res.data.code != "OK") {
+          } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
             this.joinErrorMsg = res.data.msg;
           } else {
             this.$router.push("/game");
@@ -138,7 +138,7 @@ export default {
         if (res.status != 200) {
           this.$message.error("未知错误");
           console.log(res);
-        } else if (res.data.code != "OK") {
+        } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
           this.$message.error(res.data.msg);
         } else {
           this.$router.push("/game");

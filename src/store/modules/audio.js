@@ -1,14 +1,14 @@
 const state = {
-    bgm_audio={
+    bgm_audio: {
         url: "",
         playing: false,
         loop: false
     },
-    instruction_audio={
+    instruction_audio: {
         url: "",
         playing: false,
     },
-    audio_queue=[],
+    audio_queue: [],
 };
 
 const getters = {};
