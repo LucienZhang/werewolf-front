@@ -33,7 +33,7 @@
           </a-form-model>
           <div>
             已有账户？
-            <router-link to="/login" style="{color: #007bff;}">登录</router-link>
+            <router-link to="/login" style="color: #007bff">登录</router-link>
           </div>
           <p class="mt-5 mb-3 text-muted">&copy; 2017-Present</p>
         </div>

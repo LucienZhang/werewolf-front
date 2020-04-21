@@ -3,18 +3,23 @@
     <div class="container-fluid">
       <div class="row user-row">
         <div class="col-6">
-          <div
+          <strong
             v-if="$store.state.logged_in"
             id="nickname"
             class="float-left"
-          >{{$store.state.user.nickname}}</div>
+          >{{$store.state.user.nickname}}</strong>
         </div>
         <div class="col-6">
-          <div v-if="$store.state.logged_in" class="float-right" @click="logout">退出</div>
-          <div v-else class="float-right" @click="login">登录</div>
+          <div
+            v-if="$store.state.logged_in"
+            class="float-right"
+            @click="logout"
+            style="color: #007bff"
+          >退出</div>
+          <router-link v-else tag="div" class="float-right" to="/login" style="color: #007bff">登录</router-link>
         </div>
       </div>
-      <hr style="border-top:1px solid white; margin:0px;" />
+      <hr style="border-top:1px solid white; margin:5px 0px 0px 0px;" />
       <div class="row main-btn-row">
         <div class="col-lg-4 col-md-6 col-sm-6 col-6 text-center">
           <div class="button-holder">
@@ -58,8 +63,8 @@
       @cancel="joinModalVisible=false"
       :confirmLoading="joinModalConfirmLoading"
     >
-      <a-alert v-if="joinErrorMsg.length>0" :message="joinErrorMsg" type="error" />
-      <input type="text" v-model="gid" />
+      <!-- <a-alert v-if="joinErrorMsg" :message="joinErrorMsg" type="error" /> -->
+      <a-input size="large" v-model="gid" />
     </a-modal>
   </div>
 </template>
@@ -75,31 +80,12 @@ export default {
     return {
       joinModalVisible: false,
       gid: "",
-      joinModalConfirmLoading: false,
-      joinErrorMsg: ""
+      joinModalConfirmLoading: false
     };
   },
   computed: { ...mapState(["logged_in"]) },
   methods: {
     ...mapActions(["getGameInfo", "logout"]),
-
-    login() {
-      this.$router.push("/login");
-      // api.get("/login").then(res => {
-      //   if (res.status == 200) {
-      //     this.$store.state.logged_in = true;
-      //     this.$store.state.user = res.data.user;
-      //   }
-      // });
-    },
-    // logout() {
-    //   api.get("/logout").then(res => {
-    //     if (res.status == 200) {
-    //       this.$store.state.logged_in = false;
-    //       this.$store.state.user = {};
-    //     }
-    //   });
-    // },
     setup() {
       if (this.logged_in) {
         this.$router.push("/setup");
@@ -111,7 +97,6 @@ export default {
       if (this.logged_in) {
         this.gid = "";
         this.joinModalVisible = true;
-        this.joinErrorMsg = "";
       } else {
         this.$router.push("/login");
       }
@@ -119,31 +104,31 @@ export default {
     handleJoinOk() {
       let re = /^[1-9]\d*$/;
       if (!re.test(this.gid)) {
-        this.joinErrorMsg = "房间号错误，请输入数字";
+        this.$message.error("房间号错误，请输入数字");
       } else {
         api.get("/join?gid=" + this.gid).then(res => {
           if (res.status != 200) {
-            this.joinErrorMsg = "未知错误";
+            this.$message.error("未知错误");
             console.log(res);
           } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
-            this.joinErrorMsg = res.data.msg;
+            this.$message.error(res.data.msg);
           } else {
+            this.joinModalVisible = false;
             this.$router.push("/game");
           }
         });
       }
     },
     returnLast() {
-      api.get("/join?gid=" + this.gid).then(res => {
-        if (res.status != 200) {
-          this.$message.error("未知错误");
-          console.log(res);
-        } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
-          this.$message.error(res.data.msg);
-        } else {
+      if (this.logged_in) {
+        if (this.$store.state.user.gid > 0) {
           this.$router.push("/game");
+        } else {
+          this.$message.error("游戏不存在");
         }
-      });
+      } else {
+        this.$router.push("/login");
+      }
     },
     info() {},
     feedback() {}
@@ -217,3 +202,13 @@ button {
 </style>
 
 
+<style lang="scss">
+.ant-message-notice {
+  .ant-message-notice-content {
+    .anticon {
+      vertical-align: 0px;
+      top: -1px;
+    }
+  }
+}
+</style>

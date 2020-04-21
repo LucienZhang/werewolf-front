@@ -4,14 +4,14 @@ import router from './router';
 import store from './store';
 // import axios from 'axios';
 // import { Button, Row, Col } from "ant-design-vue";
-import { Modal, Alert, FormModel, Input, Checkbox, Icon, message } from "ant-design-vue";
+import { Modal, FormModel, Input, Checkbox, Icon, message } from "ant-design-vue";
 
 Vue.config.productionTip = false;
 // Vue.component(Button.name, Button);
 // Vue.component(Row.name, Row);
 // Vue.component(Col.name, Col);
 Vue.use(Modal);
-Vue.use(Alert);
+// Vue.use(Alert);
 Vue.use(FormModel);
 Vue.use(Input);
 Vue.use(Checkbox);
