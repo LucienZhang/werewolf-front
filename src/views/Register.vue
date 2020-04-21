@@ -1,131 +1,159 @@
 <template>
-  <a-form-model
-    ref="ruleForm"
-    :model="form"
-    :rules="rules"
-    :label-col="labelCol"
-    :wrapper-col="wrapperCol"
-  >
-    <a-form-model-item label="Activity name" prop="name" ref="name">
-      <a-input
-        v-model="form.name"
-        @blur="
-          () => {
-            $refs.name.onFieldBlur();
-          }
-        "
-      />
-    </a-form-model-item>
-    <a-form-model-item label="Activity zone" prop="region">
-      <a-select v-model="form.region" placeholder="please select your zone">
-        <a-select-option value="shanghai">
-          Zone one
-        </a-select-option>
-        <a-select-option value="beijing">
-          Zone two
-        </a-select-option>
-      </a-select>
-    </a-form-model-item>
-    <a-form-model-item label="Activity time" required prop="date1">
-      <a-date-picker
-        v-model="form.date1"
-        show-time
-        type="date"
-        placeholder="Pick a date"
-        style="width: 100%;"
-      />
-    </a-form-model-item>
-    <a-form-model-item label="Instant delivery" prop="delivery">
-      <a-switch v-model="form.delivery" />
-    </a-form-model-item>
-    <a-form-model-item label="Activity type" prop="type">
-      <a-checkbox-group v-model="form.type">
-        <a-checkbox value="1" name="type">
-          Online
-        </a-checkbox>
-        <a-checkbox value="2" name="type">
-          Promotion
-        </a-checkbox>
-        <a-checkbox value="3" name="type">
-          Offline
-        </a-checkbox>
-      </a-checkbox-group>
-    </a-form-model-item>
-    <a-form-model-item label="Resources" prop="resource">
-      <a-radio-group v-model="form.resource">
-        <a-radio value="1">
-          Sponsor
-        </a-radio>
-        <a-radio value="2">
-          Venue
-        </a-radio>
-      </a-radio-group>
-    </a-form-model-item>
-    <a-form-model-item label="Activity form" prop="desc">
-      <a-input v-model="form.desc" type="textarea" />
-    </a-form-model-item>
-    <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="onSubmit">
-        Create
-      </a-button>
-      <a-button style="margin-left: 10px;" @click="resetForm">
-        Reset
-      </a-button>
-    </a-form-model-item>
-  </a-form-model>
+  <div class="register">
+    <div class="container-fluid">
+      <div class="row form-row">
+        <div class="col-12 text-center">
+          <img class="mb-4" src="../assets/logo.png" alt width="100" height="50" />
+          <h1 class="h3 mb-3 font-weight-normal">新用户注册</h1>
+          <a-form-model ref="registerForm" :model="form" :rules="rules">
+            <a-form-model-item has-feedback prop="username">
+              <a-input size="large" v-model="form.username" placeholder="用户名">
+                <a-icon slot="prefix" type="idcard" style="color:rgba(0,0,0,.25)" />
+              </a-input>
+            </a-form-model-item>
+            <a-form-model-item prop="password">
+              <a-input-password size="large" v-model="form.password" placeholder="密码">
+                <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
+              </a-input-password>
+            </a-form-model-item>
+            <a-form-model-item prop="confirm">
+              <a-input-password size="large" v-model="form.confirm" placeholder="确认密码">
+                <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
+              </a-input-password>
+            </a-form-model-item>
+            <a-form-model-item prop="nickname">
+              <a-input size="large" v-model="form.nickname" placeholder="昵称（在游戏中显示）">
+                <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
+              </a-input>
+            </a-form-model-item>
+            <a-form-model-item>
+              <small class="text-muted">点击注册，您将同意我们的隐私服务条款。</small>
+              <button class="btn btn-lg btn-primary btn-block" @click="onSubmit">注册</button>
+            </a-form-model-item>
+          </a-form-model>
+          <div>
+            已有账户？
+            <router-link to="/login" style="{color: #007bff;}">登录</router-link>
+          </div>
+          <p class="mt-5 mb-3 text-muted">&copy; 2017-Present</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
+
 <script>
+import api from "../axios-api";
+
 export default {
   data() {
+    let checkUsername = (rule, value, callback) => {
+      if (value === "") {
+        return callback(new Error("请输入用户名"));
+      } else {
+        api
+          .post("/check_username", { username: this.form.username })
+          .then(res => {
+            if (res.status != 200) {
+              callback(new Error("未知错误"));
+              console.log(res);
+            } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
+              callback(new Error(res.data.msg));
+            } else {
+              callback();
+            }
+          });
+      }
+    };
+    let validatePassword = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.form.confirm !== "") {
+          this.$refs.registerForm.validateField("confirm");
+        }
+        callback();
+      }
+    };
+    let validateConfirmPassword = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.form.password) {
+        callback(new Error("两次密码不一致！"));
+      } else {
+        callback();
+      }
+    };
     return {
-      labelCol: { span: 4 },
-      wrapperCol: { span: 14 },
-      other: '',
       form: {
-        name: '',
-        region: undefined,
-        date1: undefined,
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
+        username: "",
+        password: "",
+        confirm: "",
+        nickname: ""
       },
       rules: {
-        name: [
-          { required: true, message: 'Please input Activity name', trigger: 'blur' },
-          { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
-        ],
-        region: [{ required: true, message: 'Please select Activity zone', trigger: 'change' }],
-        date1: [{ required: true, message: 'Please pick a date', trigger: 'change' }],
-        type: [
-          {
-            type: 'array',
-            required: true,
-            message: 'Please select at least one activity type',
-            trigger: 'change',
-          },
-        ],
-        resource: [
-          { required: true, message: 'Please select activity resource', trigger: 'change' },
-        ],
-        desc: [{ required: true, message: 'Please input activity form', trigger: 'blur' }],
-      },
+        username: [{ validator: checkUsername, trigger: "blur" }],
+        password: [{ validator: validatePassword, trigger: "change" }],
+        confirm: [{ validator: validateConfirmPassword, trigger: "change" }],
+        nickname: [
+          { required: true, message: "请输入游戏昵称", trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
     onSubmit() {
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.registerForm.validate(valid => {
         if (valid) {
-          alert('submit!');
+          let { confirm, ...data } = this.form;
+          api.post("/register", data).then(res => {
+            if (res.status != 200) {
+              this.$message.error("未知错误");
+              console.log(res);
+            } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
+              this.$message.error(res.data.msg);
+            } else {
+              this.$router.push("/login");
+            }
+          });
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
-    },
-    resetForm() {
-      this.$refs.ruleForm.resetFields();
-    },
-  },
+    }
+  }
 };
 </script>
+
+<style scoped lang="scss">
+.register {
+  height: 100vh;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #f5f5f5;
+
+  .container-fluid {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+
+    .ant-form-item {
+      margin-bottom: 15px;
+    }
+    .ant-checkbox-wrapper {
+      margin-bottom: 28px;
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.register {
+  .ant-form-explain {
+    margin-top: 5px;
+  }
+}
+</style>

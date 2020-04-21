@@ -5,10 +5,10 @@
         <div class="col-12 text-center">
           <img class="mb-4" src="../assets/logo.png" alt width="100" height="50" />
           <h1 class="h3 mb-3 font-weight-normal">请登录</h1>
-          <a-form-model ref="ruleForm" :model="form" :rules="rules">
-            <a-form-model-item prop="username" ref="username">
+          <a-form-model ref="loginForm" :model="form" :rules="rules">
+            <a-form-model-item prop="username">
               <a-input size="large" v-model="form.username" placeholder="用户名">
-                <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
+                <a-icon slot="prefix" type="idcard" style="color:rgba(0,0,0,.25)" />
               </a-input>
             </a-form-model-item>
             <a-form-model-item prop="password">
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
           api.post("/login", this.form).then(res => {
             if (res.status != 200) {
