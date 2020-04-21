@@ -3,19 +3,10 @@
     <div class="container-fluid">
       <div class="row user-row">
         <div class="col-6">
-          <strong
-            v-if="$store.state.logged_in"
-            id="nickname"
-            class="float-left"
-          >{{$store.state.user.nickname}}</strong>
+          <strong v-if="logged_in" id="nickname" class="float-left">{{$store.state.user.nickname}}</strong>
         </div>
         <div class="col-6">
-          <div
-            v-if="$store.state.logged_in"
-            class="float-right"
-            @click="logout"
-            style="color: #007bff"
-          >退出</div>
+          <div v-if="logged_in" class="float-right" @click="logout" style="color: #007bff">退出</div>
           <router-link v-else tag="div" class="float-right" to="/login" style="color: #007bff">登录</router-link>
         </div>
       </div>
@@ -85,7 +76,7 @@ export default {
   },
   computed: { ...mapState(["logged_in"]) },
   methods: {
-    ...mapActions(["getGameInfo", "logout"]),
+    ...mapActions(["getUserInfo", "logout"]),
     setup() {
       if (this.logged_in) {
         this.$router.push("/setup");
@@ -134,7 +125,7 @@ export default {
     feedback() {}
   },
   created() {
-    this.getGameInfo();
+    this.getUserInfo();
   }
 };
 </script>

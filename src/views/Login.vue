@@ -31,6 +31,7 @@
 
 <script>
 import api from "../axios-api";
+import { mapMutations } from "vuex";
 
 export default {
   data() {
@@ -49,6 +50,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["updateGameInfo"]),
     onSubmit() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -59,8 +61,7 @@ export default {
             } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
               this.$message.error(res.data.msg);
             } else {
-              this.$store.state.logged_in = true;
-              this.$store.state.user = res.data.user;
+              this.updateGameInfo({ logged_in: true, user: res.data.user });
               this.$router.push("/");
             }
           });
