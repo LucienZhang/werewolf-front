@@ -79,7 +79,7 @@
             @click="onSubmit"
             style="margin-top: 30px"
           >创建</button>
-          <p class="mt-5 mb-3 text-muted">&copy; 2017-Present</p>
+          <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-Present</p>
         </div>
       </div>
     </div>
@@ -164,7 +164,8 @@ export default {
 
 <style scoped lang="scss">
 .setup {
-  height: 100vh;
+  min-height: 100%;
+  height: auto;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;

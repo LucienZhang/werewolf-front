@@ -53,7 +53,7 @@ export default new Vuex.Store({
     getGameInfo({ commit }) {
       api.get("/get_game_info").then(res => {
         if (res.status == 200 && res.data.code == process.env.VUE_APP_OK_CODE) {
-          commit('updateGameInfo', { game: res.game, role: res.role });
+          commit('updateGameInfo', { game: res.data.game, role: res.data.role });
         } else {
           console.log(res);
         }
@@ -71,5 +71,5 @@ export default new Vuex.Store({
   },
   modules: {
     audio,
-  }
+  },
 });

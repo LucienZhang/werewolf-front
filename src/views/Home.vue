@@ -45,6 +45,7 @@
           </div>
         </div>
       </div>
+      <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-Present</p>
     </div>
 
     <a-modal
