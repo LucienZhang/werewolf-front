@@ -4,6 +4,7 @@ import api from "../axios-api";
 import audio from "./modules/audio";
 // import * as actions from "./actions";
 // import * as mutations from "./mutations";
+import gameEnums from './game-enums';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     user: {},
     game: {},
     role: {},
+    gameEnums,
     // audio:""
   },
   mutations: {

@@ -105,6 +105,7 @@ export default {
             this.$message.error(res.data.msg);
           } else {
             this.joinModalVisible = false;
+            this.$message.success("已加入游戏");
             this.$router.push("/game");
           }
         });

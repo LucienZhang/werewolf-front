@@ -4,7 +4,7 @@ import router from './router';
 import store from './store';
 // import axios from 'axios';
 // import { Button, Row, Col } from "ant-design-vue";
-import { Modal, FormModel, Input, Checkbox, Icon, message } from "ant-design-vue";
+import { Modal, FormModel, Input, Checkbox, Icon, message, Radio } from "ant-design-vue";
 
 Vue.config.productionTip = false;
 // Vue.component(Button.name, Button);
@@ -16,6 +16,7 @@ Vue.use(FormModel);
 Vue.use(Input);
 Vue.use(Checkbox);
 Vue.use(Icon);
+Vue.use(Radio);
 
 Vue.prototype.$message = message;
 
