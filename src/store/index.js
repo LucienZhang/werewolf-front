@@ -80,7 +80,7 @@ export default new Vuex.Store({
   },
   getters: {
     skillName(state) {
-      return skillCode => gameEnums[skillCode].key.replace("SKILL_", "").replace('_', '-').toLowerCase();
+      return skillCode => gameEnums[skillCode].key.replace('_', '-').toLowerCase();
     },
     seats(state) {
       return {

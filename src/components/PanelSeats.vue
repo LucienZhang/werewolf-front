@@ -20,6 +20,10 @@
               </div>
             </div>
             <component :is="selectedSkill"></component>
+            <!-- <div class="row skill-panel-row text-center">
+              <div class="col-12">
+              </div>
+            </div>-->
           </div>
         </div>
       </div>
@@ -53,7 +57,7 @@
       </div>
     </div>
 
-    <a-modal title="游戏身份" :visible="showRole" @cancel="showRole=false">
+    <a-modal title="游戏身份" :visible="showRole" @cancel="showRole=false" centered>
       <template slot="footer">
         <a-button type="primary" @click="showRole=false">OK</a-button>
       </template>
@@ -69,7 +73,13 @@
       </div>
     </a-modal>
 
-    <a-modal title="技能" :visible="showSkill" @cancel="onCloseSkillModal" class="skill-modal">
+    <a-modal
+      title="技能"
+      :visible="showSkill"
+      @cancel="onCloseSkillModal"
+      class="skill-modal"
+      centered
+    >
       <template slot="footer">
         <a-button type="primary" @click="onCloseSkillModal">取消</a-button>
       </template>
@@ -91,11 +101,11 @@ import { Modal } from "ant-design-vue";
 import { mapState, mapGetters } from "vuex";
 import api from "../axios-api";
 
-import Discover from "../components/skills/Discover";
+import SkillDiscover from "./skills/SkillDiscover";
 
 export default {
   name: "PanelSeats",
-  components: { Discover },
+  components: { SkillDiscover },
   data() {
     return {
       history: [],
@@ -217,6 +227,25 @@ export default {
         margin-left: 5px;
       }
     }
+
+    /deep/ .skill-info-row {
+      text-align: center;
+      height: 65px;
+      font-size: 20px;
+      color: black;
+      font-weight: bold;
+
+      div {
+        margin: auto;
+      }
+    }
+
+    /deep/ .skill-btn-row {
+      text-align: center;
+      .btn {
+        margin: 0px 5px;
+      }
+    }
   }
   .seats-row {
     .seats-area {
@@ -256,14 +285,20 @@ export default {
   overflow-y: auto;
 }
 
-.btn {
-  &.vote {
+/deep/ .btn {
+  &:not([class*="btn-"]):not([class*="skill-"]) {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: #fff;
+  }
+
+  &.skill-vote {
     background-color: #ffc107;
     border-color: #ffc107;
     color: #212529;
   }
 
-  &.discover {
+  &.skill-discover {
     background-color: #28a745;
     border-color: #28a745;
     color: #fff;

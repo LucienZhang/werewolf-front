@@ -6,7 +6,7 @@
           <div class="float-left header-info">{{ role.nickname }}</div>
         </div>
         <div class="col-8">
-          <img src="../assets/werewolf.png" alt="Logo" />
+          <img id="werewolf-logo" src="../assets/werewolf.png" alt="Logo" />
         </div>
         <div class="col-2">
           <router-link tag="div" class="float-right header-info" to="/" style="color: #007bff">退出</router-link>
@@ -48,14 +48,20 @@ export default {
 
 <style scoped lang="scss">
 .game {
-  min-height: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   background: url(../assets/game_bg.jpg) no-repeat center center #cccccc;
   background-size: cover;
   background-attachment: fixed;
   color: white;
+  padding-bottom: 20px;
 
   .header-row {
+    #werewolf-logo {
+      margin-left: -50%;
+      margin-right: -50%;
+    }
+
     .header-info {
       position: relative;
       top: 30px;
@@ -66,5 +72,4 @@ export default {
     }
   }
 }
-
 </style>
