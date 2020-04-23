@@ -17,10 +17,7 @@ export default new Vuex.Store({
     game: {},
     role: {},
     gameEnums,
-    runtime: {
-      requiredPlayerCnt: 0,
-      selectedPlayers: [],
-    }
+    runtime: {}
     // audio:""
   },
   mutations: {
@@ -44,6 +41,14 @@ export default new Vuex.Store({
           state.role = role;
         }
       }
+    },
+    initRuntime(state) {
+      state.runtime = {
+        requiredPlayerCnt: 0,
+        selectedPlayers: [],
+        history: [],
+        feedback: []
+      };
     }
   },
   actions: {

@@ -19,7 +19,7 @@
                 <button class="btn btn-warning float-right" @click="showSkill=true">使用技能</button>
               </div>
             </div>
-            <component :is="selectedSkill"></component>
+            <component :is="selectedSkill" @finish="clearSkillPanel"></component>
             <!-- <div class="row skill-panel-row text-center">
               <div class="col-12">
               </div>
@@ -34,8 +34,8 @@
               <div class="col-6">
                 <div v-for="pos in seats.left" :key="pos" class="player-area">
                   <button
-                    class="btn btn-info"
-                    :class="{selectedSkill:runtime.selectedPlayers.includes(pos)}"
+                    class="btn"
+                    :class="{[selectedSkill]:runtime.selectedPlayers.includes(pos)}"
                     @click="onClickPlayer(pos)"
                   >{{pos}}</button>
                   <span>{{playerOnPos(pos).nickname}}</span>
@@ -45,8 +45,8 @@
                 <div v-for="pos in seats.right" :key="pos" class="player-area player-area-right">
                   <span>{{playerOnPos(pos).nickname}}</span>
                   <button
-                    class="btn btn-info"
-                    :class="{selectedSkill:runtime.selectedPlayers.includes(pos)}"
+                    class="btn"
+                    :class="{[selectedSkill]:runtime.selectedPlayers.includes(pos)}"
                     @click="onClickPlayer(pos)"
                   >{{pos}}</button>
                 </div>
@@ -73,15 +73,9 @@
       </div>
     </a-modal>
 
-    <a-modal
-      title="技能"
-      :visible="showSkill"
-      @cancel="onCloseSkillModal"
-      class="skill-modal"
-      centered
-    >
+    <a-modal title="技能" :visible="showSkill" @cancel="clearSkillPanel" class="skill-modal" centered>
       <template slot="footer">
-        <a-button type="primary" @click="onCloseSkillModal">取消</a-button>
+        <a-button type="primary" @click="clearSkillPanel">取消</a-button>
       </template>
       <div class="text-center skill-list">
         <div v-for="(skill, index) in role.skills" :key="index">
@@ -92,6 +86,18 @@
           >{{gameEnums[skill].label}}</button>
         </div>
       </div>
+    </a-modal>
+
+    <a-modal
+      title="信息"
+      :visible="runtime.feedback.length!==0"
+      @cancel="runtime.feedback=[]"
+      centered
+    >
+      <template slot="footer">
+        <a-button type="primary" @click="runtime.feedback=[]">取消</a-button>
+      </template>
+      <p v-for="(item, index) in runtime.feedback" :key="index" v-html="item"></p>
     </a-modal>
   </div>
 </template>
@@ -108,7 +114,6 @@ export default {
   components: { SkillDiscover },
   data() {
     return {
-      history: [],
       showRole: false,
       showSkill: false,
       selectedSkill: ""
@@ -142,7 +147,7 @@ export default {
     },
     game_history() {
       let ret = [];
-      for (const item of this.history) {
+      for (const item of this.runtime.history) {
         ret.push(<p domPropsInnerHTML={item}></p>);
       }
       return <div class="history-content">{ret}</div>;
@@ -170,9 +175,11 @@ export default {
         maskClosable: true
       });
     },
-    onCloseSkillModal() {
+    clearSkillPanel() {
       this.selectedSkill = "";
       this.showSkill = false;
+      this.runtime.requiredPlayerCnt = 0;
+      this.runtime.selectedPlayers = [];
     },
     onSelectSkill(skill) {
       this.selectedSkill = skill;
@@ -286,6 +293,10 @@ export default {
 }
 
 /deep/ .btn {
+  &:focus {
+    box-shadow: none;
+  }
+
   &:not([class*="btn-"]):not([class*="skill-"]) {
     background-color: #17a2b8;
     border-color: #17a2b8;

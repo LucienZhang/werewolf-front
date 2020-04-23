@@ -21,8 +21,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import { mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 import PanelSeats from "../components/PanelSeats";
 import HostPanel from "../components/HostPanel";
 
@@ -38,10 +37,12 @@ export default {
   components: { PanelSeats, HostPanel },
   computed: { ...mapState(["game", "role"]) },
   methods: {
-    ...mapActions(["getGameInfo"])
+    ...mapActions(["getGameInfo"]),
+    ...mapMutations(["initRuntime"])
   },
   created() {
     this.getGameInfo();
+    this.initRuntime();
   }
 };
 </script>
