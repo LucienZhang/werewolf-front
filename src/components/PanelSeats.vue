@@ -20,7 +20,6 @@
               </div>
             </div>
             <component :is="selectedSkill"></component>
-            <h1>me</h1>
           </div>
         </div>
       </div>
