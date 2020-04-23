@@ -14,34 +14,9 @@
         <div class="col-12 text-left" style="font-size: 16px">房间号：{{ game.gid }}</div>
       </div>
       <hr style="border-top:1px solid #427BFF; margin:5px 0px 0px 0px;" />
-
-      <!-- <hr style="border-top:1px solid white; margin:5px 0px 0px 0px;" /> -->
-      <!-- <div class="row main-btn-row">
-        <div class="col-lg-4 col-md-6 col-sm-6 col-6 text-center">
-          <div class="button-holder">
-            <button id="setup" type="button" class="btn" @click="setup">创建房间</button>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-6 col-6 text-center">
-          <div class="button-holder">
-            <button id="join" type="button" class="btn" @click="join">进入房间</button>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-12 col-sm-12 col-12 text-center">
-          <div class="button-holder">
-            <button id="return-last" type="button" class="btn" @click="returnLast">一键返回上局房间</button>
-          </div>
-        </div>
-      </div>-->
     </div>
-    <PanelSeats></PanelSeats>
-    <div class="container-fluid">
-      <div class="row host-row">
-        <div class="col-12">
-          <h1 style="color: white">host buttons</h1>
-        </div>
-      </div>
-    </div>
+    <PanelSeats v-if="Object.keys(game).length !== 0"></PanelSeats>
+    <HostPanel v-if="Object.keys(game).length !== 0 && role.ishost"></HostPanel>
   </div>
 </template>
 
@@ -49,6 +24,7 @@
 import { mapActions } from "vuex";
 import { mapState } from "vuex";
 import PanelSeats from "../components/PanelSeats";
+import HostPanel from "../components/HostPanel";
 
 // import api from "../axios-api";
 export default {
@@ -59,7 +35,7 @@ export default {
       // joinModalConfirmLoading: false
     };
   },
-  components: { PanelSeats },
+  components: { PanelSeats, HostPanel },
   computed: { ...mapState(["game", "role"]) },
   methods: {
     ...mapActions(["getGameInfo"])

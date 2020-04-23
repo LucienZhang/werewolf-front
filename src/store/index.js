@@ -8,6 +8,8 @@ import gameEnums from './game-enums';
 
 Vue.use(Vuex);
 
+const range = (start, stop, step = 1) => Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step);
+
 export default new Vuex.Store({
   state: {
     logged_in: false,
@@ -15,6 +17,10 @@ export default new Vuex.Store({
     game: {},
     role: {},
     gameEnums,
+    runtime: {
+      requiredPlayerCnt: 0,
+      selectedPlayers: [],
+    }
     // audio:""
   },
   mutations: {
@@ -72,4 +78,29 @@ export default new Vuex.Store({
   modules: {
     audio,
   },
+  getters: {
+    skillName(state) {
+      return skillCode => gameEnums[skillCode].key.replace("SKILL_", "").replace('_', '-').toLowerCase();
+    },
+    seats(state) {
+      return {
+        left: range(1, Math.ceil(state.game.seat_cnt / 2) + 1),
+        right: range(Math.ceil(state.game.seat_cnt / 2) + 1, state.game.seat_cnt + 1)
+      };
+    },
+    playerOnPos(state) {
+      return pos => {
+        for (const player of state.game.players) {
+          if (player.pos == pos) {
+            return player;
+          }
+        }
+        return {
+          pos: -1,
+          nickname: '',
+          avatar: -1
+        };
+      };
+    }
+  }
 });
