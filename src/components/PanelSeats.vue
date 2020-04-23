@@ -20,10 +20,6 @@
               </div>
             </div>
             <component :is="selectedSkill" @finish="clearSkillPanel"></component>
-            <!-- <div class="row skill-panel-row text-center">
-              <div class="col-12">
-              </div>
-            </div>-->
           </div>
         </div>
       </div>
