@@ -150,7 +150,11 @@ export default {
       for (const item of this.runtime.history) {
         ret.push(<p domPropsInnerHTML={item}></p>);
       }
-      return <div class="history-content">{ret}</div>;
+      return (
+        <div ref="historyContent" class="history-content">
+          {ret}
+        </div>
+      );
     },
     roleImgURL() {
       return require("../assets/cards/" +
@@ -169,11 +173,12 @@ export default {
       });
     },
     showHistory() {
-      Modal.info({
+      const modal = Modal.info({
         title: "历史信息",
         content: this.game_history,
         maskClosable: true
       });
+      this.$refs.historyContent.scrollTop = this.$refs.historyContent.scrollHeight;
     },
     clearSkillPanel() {
       this.selectedSkill = "";
