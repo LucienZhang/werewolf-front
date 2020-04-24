@@ -1,6 +1,6 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
 // import Login from '../views/Login.vue';
 // import Register from '../views/Register.vue';
 // import Game from '../views/Game.vue';
@@ -10,9 +10,9 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
   },
   // {
   //   path: '/about',
@@ -23,31 +23,31 @@ const routes = [
   //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   // },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/Login.vue')
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: () => import('../views/Register.vue')
+    path: "/register",
+    name: "Register",
+    component: () => import("../views/Register.vue"),
   },
   {
-    path: '/game',
-    name: 'Game',
-    component: () => import('../views/Game.vue')
+    path: "/game",
+    name: "Game",
+    component: () => import("../views/Game.vue"),
   },
   {
-    path: '/setup',
-    name: 'Setup',
-    component: () => import('../views/Setup.vue')
-  }
+    path: "/setup",
+    name: "Setup",
+    component: () => import("../views/Setup.vue"),
+  },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 export default router;
