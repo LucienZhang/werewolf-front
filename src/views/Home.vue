@@ -65,7 +65,7 @@
 import { mapActions } from "vuex";
 import { mapState } from "vuex";
 
-import api from "../axios-api";
+import gameApi from "../axios-game";
 export default {
   name: "Home",
   data() {
@@ -98,7 +98,7 @@ export default {
       if (!re.test(this.gid)) {
         this.$message.error("房间号错误，请输入数字");
       } else {
-        api.get("/join?gid=" + this.gid).then(res => {
+        gameApi.get("/join?gid=" + this.gid).then(res => {
           if (res.status != 200) {
             this.$message.error("未知错误");
             console.log(res);
@@ -127,7 +127,15 @@ export default {
     feedback() {}
   },
   created() {
-    this.getUserInfo();
+    console.log(
+      "Home created",
+      this.logged_in,
+      this.$store.state.token,
+      this.$store.state.token_type
+    );
+    if (this.logged_in) {
+      this.getUserInfo();
+    }
   }
 };
 </script>

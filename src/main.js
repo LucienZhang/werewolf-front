@@ -5,6 +5,16 @@ import store from "./store";
 // import axios from 'axios';
 // import { Button, Row, Col } from "ant-design-vue";
 import { Modal, FormModel, Input, Checkbox, Icon, message, Radio, Button } from "ant-design-vue";
+import VueNativeSock from "vue-native-websocket";
+
+Vue.use(VueNativeSock, process.env.VUE_APP_WS_URL, {
+  store: store,
+  // format: "json",
+  reconnection: true,
+  reconnectionAttempts: 5,
+  reconnectionDelay: 3000,
+  connectManually: true,
+});
 
 Vue.config.productionTip = false;
 // Vue.component(Button.name, Button);

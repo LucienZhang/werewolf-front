@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import api from "../axios-api";
+import userApi from "../axios-user";
 
 export default {
   data() {
@@ -51,8 +51,8 @@ export default {
       if (value === "") {
         return callback(new Error("请输入用户名"));
       } else {
-        api
-          .post("/check_username", { username: this.form.username })
+        userApi
+          .get("/check_username?username=" + this.form.username)
           .then(res => {
             if (res.status != 200) {
               callback(new Error("未知错误"));
@@ -106,16 +106,22 @@ export default {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
           let { confirm, ...data } = this.form;
-          api.post("/register", data).then(res => {
-            if (res.status != 200) {
+          userApi
+            .post("/create", data)
+            .then(res => {
+              if (res.status != 200) {
+                this.$message.error("未知错误");
+                console.log(res);
+              } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
+                this.$message.error(res.data.msg);
+              } else {
+                this.$router.push("/login");
+              }
+            })
+            .catch(res => {
               this.$message.error("未知错误");
               console.log(res);
-            } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
-              this.$message.error(res.data.msg);
-            } else {
-              this.$router.push("/login");
-            }
-          });
+            });
         } else {
           return false;
         }

@@ -101,7 +101,7 @@
 <script>
 import { Modal } from "ant-design-vue";
 import { mapState, mapGetters } from "vuex";
-import api from "../axios-api";
+import gameApi from "../axios-game";
 
 import SkillDiscover from "./skills/SkillDiscover";
 
@@ -188,7 +188,7 @@ export default {
     },
     onClickPlayer(pos) {
       if (this.game.status == 1401) {
-        api.get("/sit?position=" + pos).then(res => {
+        gameApi.get("/sit?position=" + pos).then(res => {
           if (res.status != 200) {
             this.$message.error("未知错误");
             console.log(res);

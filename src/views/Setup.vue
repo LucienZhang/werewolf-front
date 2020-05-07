@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import api from "../axios-api";
+import gameApi from "../axios-game";
 import { mapState } from "vuex";
 
 const wolves = [414];
@@ -132,7 +132,7 @@ export default {
     onSubmit() {
       this.$refs.setupForm.validate(valid => {
         if (valid) {
-          api.post("/setup", this.form).then(res => {
+          gameApi.post("/setup", this.form).then(res => {
             if (res.status != 200) {
               this.$message.error("未知错误");
               console.log(res);
@@ -140,7 +140,7 @@ export default {
               this.$message.error(res.data.msg);
             } else {
               this.$message.success("创建成功");
-              api.get("/join?gid=" + res.data.gid).then(res => {
+              gameApi.get("/join?gid=" + res.data.gid).then(res => {
                 if (res.status != 200) {
                   this.$message.error("未知错误");
                   console.log(res);

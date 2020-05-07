@@ -14,7 +14,7 @@
 <script>
 import { mapState } from "vuex";
 
-import api from "../../axios-api";
+import gameApi from "../../axios-game";
 export default {
   computed: {
     ...mapState(["runtime"])
@@ -30,7 +30,7 @@ export default {
         return;
       } else {
         let index = this.runtime.history.length;
-        api
+        gameApi
           .get("/discover?target=" + this.runtime.selectedPlayers[0])
           .then(res => {
             if (res.status != 200) {

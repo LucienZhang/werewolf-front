@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import api from "../axios-api";
+import authApi from "../axios-auth";
 import { mapMutations } from "vuex";
 
 export default {
@@ -54,17 +54,30 @@ export default {
     onSubmit() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          api.post("/login", this.form).then(res => {
-            if (res.status != 200) {
+          let bodyFormData = new FormData();
+          bodyFormData.set("username", this.form.username);
+          bodyFormData.set("password", this.form.password);
+          authApi
+            .post("/access-token", bodyFormData)
+            .then(res => {
+              if (res.status == 422) {
+                this.$message.error("用户名或密码错误");
+              } else if (res.status != 200) {
+                this.$message.error("未知错误");
+                console.log(res);
+              } else {
+                this.updateGameInfo({
+                  logged_in: true,
+                  token: res.data.access_token,
+                  token_type: res.data.token_type
+                });
+                this.$router.push("/");
+              }
+            })
+            .catch(res => {
               this.$message.error("未知错误");
               console.log(res);
-            } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
-              this.$message.error(res.data.msg);
-            } else {
-              this.updateGameInfo({ logged_in: true, user: res.data.user });
-              this.$router.push("/");
-            }
-          });
+            });
         } else {
           return false;
         }

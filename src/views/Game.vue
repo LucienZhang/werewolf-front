@@ -32,17 +32,29 @@ export default {
       // joinModalVisible: false,
       // gid: "",
       // joinModalConfirmLoading: false
+      heartbeatTimer: null
     };
   },
   components: { PanelSeats, HostPanel },
   computed: { ...mapState(["game", "role"]) },
   methods: {
     ...mapActions(["getGameInfo"]),
-    ...mapMutations(["initRuntime"])
+    ...mapMutations(["initRuntime"]),
+    heartbeat() {
+      this.heartbeatTimer = setTimeout(() => {
+        this.$socket.send("ping");
+        heartbeat();
+      }, process.env.VUE_APP_WS_HEARTBEAT_INTERVAL);
+    }
   },
   created() {
     this.getGameInfo();
     this.initRuntime();
+    this.$connect();
+    this.heartbeat();
+  },
+  beforeDestroy() {
+    clearTimeout(this.heartbeatTimer);
   }
 };
 </script>

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import api from "../axios-api";
+import userApi from "../axios-user";
+import gameApi from "../axios-game";
 import audio from "./modules/audio";
 // import * as actions from "./actions";
 // import * as mutations from "./mutations";
@@ -16,6 +17,8 @@ const range = (start, stop, step = 1) =>
 export default new Vuex.Store({
   state: {
     logged_in: false,
+    token: "",
+    token_type: "",
     user: {},
     game: {},
     role: {},
@@ -24,9 +27,11 @@ export default new Vuex.Store({
     // audio:""
   },
   mutations: {
-    updateGameInfo(state, { logged_in, user, game, role }) {
+    updateGameInfo(state, { logged_in, token, token_type, user, game, role }) {
       if (logged_in === false) {
         state.logged_in = false;
+        state.token = "";
+        state.token_type = "";
         state.user = {};
         state.game = {};
         state.role = {};
@@ -43,6 +48,12 @@ export default new Vuex.Store({
         if (role !== undefined) {
           state.role = role;
         }
+        if (token !== undefined) {
+          state.token = token;
+        }
+        if (token_type !== undefined) {
+          state.token_type = token_type;
+        }
       }
     },
     initRuntime(state) {
@@ -56,16 +67,16 @@ export default new Vuex.Store({
   },
   actions: {
     getUserInfo({ commit }) {
-      api.get("/get_user_info").then((res) => {
+      userApi.get("/info").then((res) => {
         if (res.status == 200 && res.data.code == process.env.VUE_APP_OK_CODE) {
-          commit("updateGameInfo", { logged_in: true, user: res.data.user });
+          commit("updateGameInfo", { user: res.data.user });
         } else {
           console.log(res);
         }
       });
     },
     getGameInfo({ commit }) {
-      api.get("/get_game_info").then((res) => {
+      gameApi.get("/get_game_info").then((res) => {
         if (res.status == 200 && res.data.code == process.env.VUE_APP_OK_CODE) {
           commit("updateGameInfo", { game: res.data.game, role: res.data.role });
         } else {
@@ -74,13 +85,13 @@ export default new Vuex.Store({
       });
     },
     logout({ commit }) {
-      api.get("/logout").then((res) => {
-        if (res.status == 200) {
-          commit("updateGameInfo", { logged_in: false });
-        } else {
-          console.log(res);
-        }
-      });
+      commit("updateGameInfo", { logged_in: false });
+      // api.get("/logout").then((res) => {
+      //   if (res.status == 200) {
+      //   } else {
+      //     console.log(res);
+      //   }
+      // });
     },
   },
   modules: {
