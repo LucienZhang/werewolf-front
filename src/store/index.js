@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import userApi from "../axios-user";
 import gameApi from "../axios-game";
-import audio from "./modules/audio";
+// import audio from "./modules/audio";
 // import * as actions from "./actions";
 // import * as mutations from "./mutations";
 import gameEnums from "./game-enums";
@@ -24,7 +24,12 @@ export default new Vuex.Store({
     role: {},
     gameEnums,
     runtime: {},
-    // audio:""
+    audioQueue: [],
+    socket: {
+      isConnected: false,
+      message: "",
+      reconnectError: false,
+    },
   },
   mutations: {
     updateGameInfo(state, { logged_in, token, token_type, user, game, role }) {
@@ -35,18 +40,19 @@ export default new Vuex.Store({
         state.user = {};
         state.game = {};
         state.role = {};
+        state.audioQueue = [];
       } else {
         if (logged_in !== undefined) {
           state.logged_in = logged_in;
         }
         if (user !== undefined) {
-          state.user = user;
+          state.user = Object.assign({}, state.user, user);
         }
         if (game !== undefined) {
-          state.game = game;
+          state.game = Object.assign({}, state.game, game);
         }
         if (role !== undefined) {
-          state.role = role;
+          state.role = Object.assign({}, state.role, role);
         }
         if (token !== undefined) {
           state.token = token;
@@ -64,21 +70,58 @@ export default new Vuex.Store({
         feedback: [],
       };
     },
+    SOCKET_ONOPEN(state, event) {
+      Vue.prototype.$socket = event.currentTarget;
+      state.socket.isConnected = true;
+    },
+    SOCKET_ONCLOSE(state, event) {
+      state.socket.isConnected = false;
+    },
+    SOCKET_ONERROR(state, event) {
+      console.error(state, event);
+    },
+    // default handler called for all methods
+    SOCKET_ONMESSAGE(state, message) {
+      state.socket.message = message;
+      console.log(message);
+    },
+    // mutations for reconnect methods
+    SOCKET_RECONNECT(state, count) {
+      console.info(state, count);
+    },
+    SOCKET_RECONNECT_ERROR(state) {
+      state.socket.reconnectError = true;
+    },
+    SOCKET_GAME(state, data) {
+      state.game = Object.assign({}, state.game, data.game);
+    },
+    SOCKET_HISTORY(state, data) {
+      state.runtime.history.push(data.history);
+      if (data.show) {
+        state.runtime.feedback.push(data.history);
+      }
+    },
+    SOCKET_AUDIO(state, data) {
+      console.log(data);
+      state.audioQueue.push(data);
+    },
   },
   actions: {
     getUserInfo({ commit }) {
       userApi.get("/info").then((res) => {
         if (res.status == 200 && res.data.code == process.env.VUE_APP_OK_CODE) {
           commit("updateGameInfo", { user: res.data.user });
+          console.log(res);
         } else {
           console.log(res);
         }
       });
     },
     getGameInfo({ commit }) {
-      gameApi.get("/get_game_info").then((res) => {
+      gameApi.get("/info").then((res) => {
         if (res.status == 200 && res.data.code == process.env.VUE_APP_OK_CODE) {
           commit("updateGameInfo", { game: res.data.game, role: res.data.role });
+          console.log(res);
         } else {
           console.log(res);
         }
@@ -94,9 +137,9 @@ export default new Vuex.Store({
       // });
     },
   },
-  modules: {
-    audio,
-  },
+  // modules: {
+  //   audio,
+  // },
   getters: {
     skillName(state) {
       return (skillCode) => gameEnums[skillCode].key.replace("_", "-").toLowerCase();

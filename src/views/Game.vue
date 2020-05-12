@@ -42,19 +42,71 @@ export default {
     ...mapMutations(["initRuntime"]),
     heartbeat() {
       this.heartbeatTimer = setTimeout(() => {
-        this.$socket.send("ping");
-        heartbeat();
+        try {
+          this.$socket.sendObj({ ping: "ping" });
+          console.log("heartbeat ping");
+        } catch (error) {
+          console.log(error);
+        }
+        this.heartbeat();
       }, process.env.VUE_APP_WS_HEARTBEAT_INTERVAL);
     }
   },
   created() {
     this.getGameInfo();
     this.initRuntime();
-    this.$connect();
+    this.$connect(
+      process.env.VUE_APP_WS_URL + "?token=" + this.$store.state.token,
+      {
+        format: "json",
+        store: this.$store,
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 3000,
+        // passToStoreHandler: function(eventName, event) {
+        //   // console.log(eventName);
+        //   // console.log(event);
+        //   if (!eventName.startsWith("SOCKET_")) {
+        //     return;
+        //   }
+        //   let method = "commit";
+        //   let target = eventName.toUpperCase();
+        //   let msg = event;
+        //   console.log(this.format)
+        //   console.log(event.data)
+        //   if (this.format === "json" && event.data) {
+        //     msg = JSON.parse(event.data);
+        //     console.log(msg);
+        //     console.log(typeof msg)
+        //     console.log(JSON.parse(msg))
+        //     if (msg.mutation) {
+        //       console.log("in mutation");
+        //       target = [msg.namespace || "", msg.mutation]
+        //         .filter(e => !!e)
+        //         .join("/");
+        //       console.log(target);
+        //     } else if (msg.action) {
+        //       method = "dispatch";
+        //       target = [msg.namespace || "", msg.action]
+        //         .filter(e => !!e)
+        //         .join("/");
+        //     }
+        //   }
+        //   if (this.mutations) {
+        //     target = this.mutations[target] || target;
+        //   }
+        //   // this.store[method](target, msg);
+        //   console.log(method);
+        //   console.log(target);
+        //   console.log(msg);
+        // }
+      }
+    );
     this.heartbeat();
   },
   beforeDestroy() {
     clearTimeout(this.heartbeatTimer);
+    this.$disconnect();
   }
 };
 </script>

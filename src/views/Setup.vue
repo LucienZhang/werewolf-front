@@ -132,7 +132,7 @@ export default {
     onSubmit() {
       this.$refs.setupForm.validate(valid => {
         if (valid) {
-          gameApi.post("/setup", this.form).then(res => {
+          gameApi.post("/create", this.form).then(res => {
             if (res.status != 200) {
               this.$message.error("未知错误");
               console.log(res);
@@ -140,7 +140,7 @@ export default {
               this.$message.error(res.data.msg);
             } else {
               this.$message.success("创建成功");
-              gameApi.get("/join?gid=" + res.data.gid).then(res => {
+              gameApi.get("/join/" + res.data.gid).then(res => {
                 if (res.status != 200) {
                   this.$message.error("未知错误");
                   console.log(res);

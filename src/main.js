@@ -8,11 +8,11 @@ import { Modal, FormModel, Input, Checkbox, Icon, message, Radio, Button } from 
 import VueNativeSock from "vue-native-websocket";
 
 Vue.use(VueNativeSock, process.env.VUE_APP_WS_URL, {
-  store: store,
+  // store: store,
   // format: "json",
-  reconnection: true,
-  reconnectionAttempts: 5,
-  reconnectionDelay: 3000,
+  // reconnection: true,
+  // reconnectionAttempts: 5,
+  // reconnectionDelay: 3000,
   connectManually: true,
 });
 

@@ -98,7 +98,7 @@ export default {
       if (!re.test(this.gid)) {
         this.$message.error("房间号错误，请输入数字");
       } else {
-        gameApi.get("/join?gid=" + this.gid).then(res => {
+        gameApi.get("/join/" + this.gid).then(res => {
           if (res.status != 200) {
             this.$message.error("未知错误");
             console.log(res);
@@ -142,11 +142,17 @@ export default {
 
 <style scoped lang="scss">
 .home {
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   background: url(../assets/game_bg.jpg) no-repeat center center #cccccc;
   background-size: cover;
   background-attachment: fixed;
   padding-top: 10%;
+  padding-bottom: 20px;
+
+  p {
+    margin-bottom: 0px;
+  }
 }
 
 .user-row {
