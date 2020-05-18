@@ -5,4 +5,5 @@ module.exports = {
       return args;
     });
   },
+  publicPath: process.env.BASE_URL,
 };
