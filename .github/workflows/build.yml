@@ -13,17 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Build
-        run: yarn install && yarn build
-      - name: Zip
-        uses: montudor/action-zip@v0.1.0
-        with:
-          args: zip -qq -r ./dist.zip ./dist
+    - name: Build
+      run: yarn install && yarn build
+    - name: Zip
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -qq -r ./dist.zip ./dist
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: ./dist.zip
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist
+        path: ./dist.zip
