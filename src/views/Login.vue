@@ -66,6 +66,7 @@ export default {
                 this.$message.error("未知错误");
                 console.log(res);
               } else {
+                localStorage.setItem('token', res.data.access_token);
                 this.updateGameInfo({
                   logged_in: true,
                   token: res.data.access_token,

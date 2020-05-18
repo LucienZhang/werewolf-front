@@ -128,6 +128,7 @@ export default new Vuex.Store({
       });
     },
     logout({ commit }) {
+      localStorage.removeItem("token");
       commit("updateGameInfo", { logged_in: false });
       // api.get("/logout").then((res) => {
       //   if (res.status == 200) {

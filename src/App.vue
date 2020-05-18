@@ -17,20 +17,20 @@ export default {
       this.$store.state.token_type = "bearer";
     }
 
-    //在页面刷新时将vuex里的信息保存到localStorage里
-    window.addEventListener("beforeunload", () => {
-      window.localStorage.setItem("token", this.$store.state.token);
-      console.log(
-        "beforeunload, token is" + window.localStorage.getItem("token")
-      );
-    });
-  },
-  beforeDestroy() {
-    window.localStorage.setItem("token", this.$store.state.token);
-    console.log(
-      "before destroy, token is" + window.localStorage.getItem("token")
-    );
-  }
+  //   //在页面刷新时将vuex里的信息保存到localStorage里
+  //   window.addEventListener("beforeunload", () => {
+  //     window.localStorage.setItem("token", this.$store.state.token);
+  //     console.log(
+  //       "beforeunload, token is" + window.localStorage.getItem("token")
+  //     );
+  //   });
+  // },
+  // beforeDestroy() {
+  //   window.localStorage.setItem("token", this.$store.state.token);
+  //   console.log(
+  //     "before destroy, token is" + window.localStorage.getItem("token")
+  //   );
+  // }
 };
 </script>
 
