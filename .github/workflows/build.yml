@@ -17,13 +17,13 @@ jobs:
 
       - name: Build
         run: yarn install && yarn build
-      - name: Zip
-        uses: montudor/action-zip@v0.1.0
-        with:
-          args: zip -qq -r ./dist.zip ./dist
+      # - name: Zip
+      #   uses: montudor/action-zip@v0.1.0
+      #   with:
+      #     args: zip -qq -r ./dist.zip ./dist
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: dist
-          path: ./dist.zip
+          path: ./dist/
