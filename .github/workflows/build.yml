@@ -1,4 +1,4 @@
-name: Build
+name: Hello
 
 on:
   release:
