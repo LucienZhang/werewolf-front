@@ -15,14 +15,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build & Zip
-      - run: yarn install && yarn build
-      - uses: montudor/action-zip@v0.1.0
+      - name: Build
+        run: yarn install && yarn build
+      - name: Zip
+        uses: montudor/action-zip@v0.1.0
         with:
           args: zip -qq -r ./dist.zip ./dist
 
       - name: Upload artifacts
-      - uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: dist
           path: ./dist.zip
