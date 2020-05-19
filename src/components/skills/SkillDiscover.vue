@@ -39,8 +39,10 @@ export default {
             } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
               this.$message.error(res.data.msg);
             } else {
-              this.runtime.history.splice(index, 0, res.data.result);
-              this.runtime.feedback.push(res.data.result);
+              if (res.data.result) {
+                this.runtime.history.splice(index, 0, res.data.result);
+                this.runtime.feedback.push(res.data.result);
+              }
               this.$emit("finish");
             }
           });

@@ -25,6 +25,7 @@ export default new Vuex.Store({
     gameEnums,
     runtime: {},
     audioQueue: [],
+    audioTrigger: false,
     socket: {
       isConnected: false,
       message: "",
@@ -96,14 +97,16 @@ export default new Vuex.Store({
       state.game = Object.assign({}, state.game, data.game);
     },
     SOCKET_HISTORY(state, data) {
-      state.runtime.history.push(data.history);
+      let history = data.history.split("\n");
+      state.runtime.history.push(...history);
       if (data.show) {
-        state.runtime.feedback.push(data.history);
+        state.runtime.feedback.push(...history);
       }
     },
     SOCKET_AUDIO(state, data) {
       console.log(data);
       state.audioQueue.push(data);
+      state.audioTrigger = !state.audioTrigger;
     },
   },
   actions: {
@@ -143,7 +146,7 @@ export default new Vuex.Store({
   // },
   getters: {
     skillName(state) {
-      return (skillCode) => gameEnums[skillCode].key.replace("_", "-").toLowerCase();
+      return (skillCode) => gameEnums[skillCode].key.replace(/_/g, "-").toLowerCase();
     },
     seats(state) {
       return {

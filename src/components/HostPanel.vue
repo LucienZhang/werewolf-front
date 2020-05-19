@@ -8,8 +8,8 @@
         </div>
       </div>
     </div>
-    <audio ref="bgmAudio" :loop="bgm.loop" :src="bgmSrc" preload="auto" @ended="onBgmEnded"></audio>
-    <audio ref="instructionAudio" :src="instructionSrc" preload="auto" @ended="onInsEnded"></audio>
+    <audio ref="bgmAudio" :loop="bgm.loop" preload="auto" @ended="onBgmEnded"></audio>
+    <audio ref="instructionAudio" preload="auto" @ended="onInsEnded"></audio>
   </div>
 </template>
 
@@ -35,7 +35,14 @@ export default {
     };
   },
   computed: {
-    ...mapState(["game", "role", "gameEnums", "runtime", "audioQueue"]),
+    ...mapState([
+      "game",
+      "role",
+      "gameEnums",
+      "runtime",
+      "audioQueue",
+      "audioTrigger"
+    ]),
     // ...mapGetters(["skillName", "seats", "playerOnPos"]),
     bgmSrc() {
       if (this.bgm.file) {
@@ -54,10 +61,19 @@ export default {
   },
   methods: {
     deal() {
-      // this.$refs.bgmAudio.play();
       this.$refs.bgmAudio.pause();
-      // this.$refs.instructionAudio.play();
       this.$refs.instructionAudio.pause();
+      // let bgmPlayPromise = this.$refs.bgmAudio.play();
+      // if (bgmPlayPromise !== undefined) {
+      //   bgmPlayPromise.then(_ => {
+      //   });
+      // }
+
+      // let insPlayPromise = this.$refs.instructionAudio.play();
+      // if (insPlayPromise !== undefined) {
+      //   insPlayPromise.then(_ => {
+      //   });
+      // }
 
       gameApi.get("/deal").then(res => {
         if (res.status != 200) {
@@ -79,49 +95,60 @@ export default {
       });
     },
     move_on() {
+      console.log("move_on");
       if (this.busy) {
         return;
       }
+      console.log("busy:" + this.busy);
       let data = this.audioQueue.shift();
+      console.log(data);
       if (data === undefined) {
         return;
       }
       let bgmAudio = this.$refs["bgmAudio"];
       let instructionAudio = this.$refs["instructionAudio"];
       this.busy = true;
-      if (data.bgm) {
+      if (data.bgm.file) {
         bgmAudio.pause();
         this.bgm = data.bgm;
+        bgmAudio.src = this.bgmSrc;
         bgmAudio.play();
+      } else {
+        this.bgm.loop = data.bgm.loop;
       }
       instructionAudio.pause();
       this.instruction = data.instruction;
+      instructionAudio.src = this.instructionSrc;
+      console.log(instructionAudio);
       setTimeout(function() {
         instructionAudio.play();
       }, process.env.VUE_APP_AUDIO_BEFORE_WAIT);
     },
     onBgmEnded() {},
     onInsEnded() {
+      let vm = this;
       setTimeout(function() {
         // if (!this.bgm.loop) {
         //   bgmAudio.pause();
         // }
-        this.busy = false;
-        this.move_on();
+        vm.busy = false;
+        vm.move_on();
       }, process.env.VUE_APP_AUDIO_AFTER_WAIT);
     }
   },
   watch: {
-    audioQueue(newQueue, oldQueue) {
-      if (newQueue.length <= oldQueue.length) {
-        return;
-      }
-      console.log("audioQueue changed!");
-      console.log(this.audioQueue);
+    audioTrigger(newValue, oldValue) {
+      console.log(`trigger updating from ${oldValue} to ${newValue}`);
+      // if (!newValue) {
+      //   return;
+      // }
       this.move_on();
     }
   },
   mounted() {
+    while (this.audioQueue.length) {
+      this.audioQueue.pop();
+    }
     this.move_on();
   }
 };

@@ -104,10 +104,20 @@ import { mapState, mapGetters } from "vuex";
 import gameApi from "../axios-game";
 
 import SkillDiscover from "./skills/SkillDiscover";
+import SkillVote from "./skills/SkillVote";
+import SkillWolfKill from "./skills/SkillWolfKill";
+import SkillSuicide from "./skills/SkillSuicide";
+import SkillCaptain from "./skills/SkillCaptain";
 
 export default {
   name: "PanelSeats",
-  components: { SkillDiscover },
+  components: {
+    SkillDiscover,
+    SkillVote,
+    SkillWolfKill,
+    SkillSuicide,
+    SkillCaptain
+  },
   data() {
     return {
       showRole: false,
@@ -314,6 +324,24 @@ export default {
     background-color: #28a745;
     border-color: #28a745;
     color: #fff;
+  }
+
+  &.skill-wolf-kill {
+    background-color: #dc3545;
+    border-color: #000;
+    color: #000;
+  }
+
+  &.skill-suicide {
+    background-color: #660710;
+    border-color: #660710;
+    color: #ffc107;
+  }
+
+  &.skill-captain {
+    background-color: yellow;
+    border-color: red;
+    color: #212529;
   }
 }
 </style>

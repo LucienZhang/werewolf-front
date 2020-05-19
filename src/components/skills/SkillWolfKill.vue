@@ -5,7 +5,8 @@
     </div>
     <div class="row skill-btn-row">
       <div class="col-12">
-        <button class="btn skill-vote" @click="vote">投票</button>
+        <button class="btn skill-wolf-kill" @click="wolfKill">落刀</button>
+        <button class="btn" @click="skip">空刀</button>
       </div>
     </div>
   </div>
@@ -20,7 +21,7 @@ export default {
     ...mapState(["runtime"])
   },
   methods: {
-    vote() {
+    wolfKill() {
       if (
         this.runtime.selectedPlayers.length !== this.runtime.requiredPlayerCnt
       ) {
@@ -31,7 +32,7 @@ export default {
       } else {
         let index = this.runtime.history.length;
         gameApi
-          .get("/vote?target=" + this.runtime.selectedPlayers[0])
+          .get("/wolf_kill?target=" + this.runtime.selectedPlayers[0])
           .then(res => {
             if (res.status != 200) {
               this.$message.error("未知错误");
@@ -47,10 +48,26 @@ export default {
             }
           });
       }
+    },
+    skip() {
+      let index = this.runtime.history.length;
+      gameApi.get("/wolf_kill?target=-1").then(res => {
+        if (res.status != 200) {
+          this.$message.error("未知错误");
+          console.log(res);
+        } else if (res.data.code != process.env.VUE_APP_OK_CODE) {
+          this.$message.error(res.data.msg);
+        } else {
+          if (res.data.result) {
+            this.runtime.history.splice(index, 0, res.data.result);
+            this.runtime.feedback.push(res.data.result);
+          }
+          this.$emit("finish");
+        }
+      });
     }
   },
   created() {
-    console.log("vote created!");
     this.runtime.requiredPlayerCnt = 1;
   }
 };
