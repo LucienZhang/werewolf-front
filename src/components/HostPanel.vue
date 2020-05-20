@@ -61,8 +61,13 @@ export default {
   },
   methods: {
     deal() {
-      this.$refs.bgmAudio.pause();
-      this.$refs.instructionAudio.pause();
+      this.$refs.bgmAudio.src = require("../assets/audio/mute.mp3");
+      this.$refs.bgmAudio.play();
+      this.$refs.instructionAudio.src = require("../assets/audio/mute.mp3");
+      this.$refs.instructionAudio.play();
+
+      // this.$refs.bgmAudio.pause();
+      // this.$refs.instructionAudio.pause();
       // let bgmPlayPromise = this.$refs.bgmAudio.play();
       // if (bgmPlayPromise !== undefined) {
       //   bgmPlayPromise.then(_ => {

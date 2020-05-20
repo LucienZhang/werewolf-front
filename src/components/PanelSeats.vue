@@ -108,6 +108,9 @@ import SkillVote from "./skills/SkillVote";
 import SkillWolfKill from "./skills/SkillWolfKill";
 import SkillSuicide from "./skills/SkillSuicide";
 import SkillCaptain from "./skills/SkillCaptain";
+import SkillWitch from "./skills/SkillWitch";
+import SkillShoot from "./skills/SkillShoot";
+import SkillGuard from "./skills/SkillGuard";
 
 export default {
   name: "PanelSeats",
@@ -116,7 +119,10 @@ export default {
     SkillVote,
     SkillWolfKill,
     SkillSuicide,
-    SkillCaptain
+    SkillCaptain,
+    SkillWitch,
+    SkillShoot,
+    SkillGuard
   },
   data() {
     return {
@@ -342,6 +348,24 @@ export default {
     background-color: yellow;
     border-color: red;
     color: #212529;
+  }
+
+  &.skill-witch {
+    background-color: #684d8c;
+    border-color: #130269;
+    color: #ffffff;
+  }
+
+  &.skill-shoot {
+    background-color: #af9b2a;
+    border-color: #705317;
+    color: #ffffff;
+  }
+
+  &.skill-guard {
+    background-color: #fffb00;
+    border-color: #705317;
+    color: #ffffff;
   }
 }
 </style>

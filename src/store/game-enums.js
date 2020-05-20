@@ -53,6 +53,7 @@ const gameEnums = {
   "612": { key: "TURN_STEP_PK_VOTE", label: "PK投票" },
   "613": { key: "TURN_STEP_ANNOUNCE", label: "公布结果" },
   "614": { key: "TURN_STEP_LAST_WORDS", label: "遗言" },
+  "615": { key: "TURN_STEP_USE_SKILLS", label: "使用技能" },
   "700": { key: "GAME_MESSAGE_GAME_NOT_EXIST", label: "房间不存在" },
   "701": { key: "GAME_MESSAGE_GAME_FULL", label: "房间已满" },
   "702": { key: "GAME_MESSAGE_ALREADY_IN", label: "你已在游戏中" },
