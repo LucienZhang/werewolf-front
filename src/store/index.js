@@ -108,17 +108,32 @@ export default new Vuex.Store({
       state.audioQueue.push(data);
       state.audioTrigger = !state.audioTrigger;
     },
+    SOCKET_PLAYER_OUT(state, data) {
+      for (const player of state.game.players) {
+        if (player.pos == data.pos) {
+          player.alive = false;
+          break;
+        }
+      }
+    },
   },
   actions: {
-    getUserInfo({ commit }) {
-      userApi.get("/info").then((res) => {
-        if (res.status == 200 && res.data.code == process.env.VUE_APP_OK_CODE) {
-          commit("updateGameInfo", { user: res.data.user });
-          console.log(res);
-        } else {
-          console.log(res);
-        }
-      });
+    getUserInfo({ commit, dispatch }) {
+      userApi
+        .get("/info")
+        .then((res) => {
+          if (res.status == 200 && res.data.code == process.env.VUE_APP_OK_CODE) {
+            commit("updateGameInfo", { user: res.data.user });
+            console.log(res);
+          } else {
+            console.log(res);
+            dispatch("logout");
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          dispatch("logout");
+        });
     },
     getGameInfo({ commit }) {
       gameApi.get("/info").then((res) => {
@@ -165,6 +180,7 @@ export default new Vuex.Store({
           pos: -1,
           nickname: "",
           avatar: -1,
+          alive: true,
         };
       };
     },

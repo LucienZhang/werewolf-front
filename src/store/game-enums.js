@@ -38,7 +38,7 @@ const gameEnums = {
   "503": { key: "GROUP_TYPE_VILLAGERS", label: "民阵营" },
   "504": { key: "GROUP_TYPE_THIRD_PARTY", label: "第三方阵营" },
   "505": { key: "GROUP_TYPE_GOOD", label: "好人" },
-  "600": { key: "TURN_STEP_UNKNOWN", label: "未知阶段" },
+  "600": { key: "TURN_STEP_UNKNOWN", label: "未知" },
   "601": { key: "TURN_STEP_DEAL", label: "发牌" },
   "602": { key: "TURN_STEP_TURN_NIGHT", label: "入夜" },
   "603": { key: "TURN_STEP_TURN_DAY", label: "天亮" },

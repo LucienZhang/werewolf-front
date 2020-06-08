@@ -6,7 +6,13 @@
           <div class="panel">
             <div class="row notice-row">
               <div class="col-12">
-                <div class="float-left">第 {{game.days||0}} 天 {{gameEnums[game.status].label}}</div>
+                <div class="float-left">
+                  第 {{game.days||0}} 天 {{gameEnums[game.status].label}}
+                  <span
+                    v-if="game.status>=600&&game.status<700"
+                  >阶段</span>
+                  <span v-if="game.status>=400&&game.status<500">行动</span>
+                </div>
                 <div class="float-right">
                   <button class="btn btn-primary btn-xs" @click="showHistory">历史信息</button>
                   <button class="btn btn-primary btn-xs" @click="showSetting">查看配置</button>
@@ -31,8 +37,9 @@
                 <div v-for="pos in seats.left" :key="pos" class="player-area">
                   <button
                     class="btn"
-                    :class="{[selectedSkill]:runtime.selectedPlayers.includes(pos)}"
+                    :class="{[selectedSkill]:runtime.selectedPlayers.includes(pos),'btn-secondary':!playerOnPos(pos).alive}"
                     @click="onClickPlayer(pos)"
+                    :disabled="!playerOnPos(pos).alive"
                   >{{pos}}</button>
                   <span>{{playerOnPos(pos).nickname}}</span>
                 </div>
@@ -42,8 +49,9 @@
                   <span>{{playerOnPos(pos).nickname}}</span>
                   <button
                     class="btn"
-                    :class="{[selectedSkill]:runtime.selectedPlayers.includes(pos)}"
+                    :class="{[selectedSkill]:runtime.selectedPlayers.includes(pos),'btn-secondary':!playerOnPos(pos).alive}"
                     @click="onClickPlayer(pos)"
+                    :disabled="!playerOnPos(pos).alive"
                   >{{pos}}</button>
                 </div>
               </div>
@@ -91,7 +99,7 @@
       centered
     >
       <template slot="footer">
-        <a-button type="primary" @click="runtime.feedback=[]">取消</a-button>
+        <a-button type="primary" @click="runtime.feedback=[]">确定</a-button>
       </template>
       <p v-for="(item, index) in runtime.feedback" :key="index" v-html="item"></p>
     </a-modal>
