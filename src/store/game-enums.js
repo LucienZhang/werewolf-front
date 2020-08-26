@@ -81,7 +81,7 @@ const gameEnums = {
   "902": { key: "TAG_GIVE_UP_ELECT", label: "退水" },
   "1000": { key: "WOLF_MODE_FIRST", label: "第一狼刀有效" },
   "1001": { key: "WOLF_MODE_ALL", label: "所有狼刀相同有效" },
-  "1100": { key: "TAG_ATTACKABLE_WOLF", label: "带刀狼" },
+  "1100": { key: "TAG_ATTACKABLE_WOLF", label: "带刀狼人" },
   "1200": { key: "STEP_FLAG_AUTO_MOVE_ON", label: "自动下一步" },
   "1201": { key: "STEP_FLAG_WAIT_FOR_ACTION", label: "等待玩家操作" },
   "1300": { key: "GAME_TIMEOUT_RANDOM_FROM", label: 12 },

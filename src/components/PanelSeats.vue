@@ -11,7 +11,7 @@
                   <span
                     v-if="game.status>=600&&game.status<700"
                   >阶段</span>
-                  <span v-if="game.status>=400&&game.status<500">行动</span>
+                  <span v-if="(game.status>=400&&game.status<500)||game.status==1100">行动</span>
                 </div>
                 <div class="float-right">
                   <button class="btn btn-primary btn-xs" @click="showHistory">历史信息</button>
@@ -130,13 +130,13 @@ export default {
     SkillCaptain,
     SkillWitch,
     SkillShoot,
-    SkillGuard
+    SkillGuard,
   },
   data() {
     return {
       showRole: false,
       showSkill: false,
-      selectedSkill: ""
+      selectedSkill: "",
     };
   },
   computed: {
@@ -148,7 +148,7 @@ export default {
           <p>游戏模式：{this.gameEnums[this.game.victoryMode].label}</p>,
           <p>警长模式：{this.gameEnums[this.game.captainMode].label}</p>,
           <p>女巫模式：{this.gameEnums[this.game.witchMode].label}</p>,
-          <p>游戏人数：{this.game.seat_cnt}</p>
+          <p>游戏人数：{this.game.seat_cnt}</p>,
         ];
         for (const role in this.game.cards) {
           if (this.game.cards.hasOwnProperty(role)) {
@@ -182,21 +182,21 @@ export default {
           .replace("ROLE_TYPE_", "")
           .toLowerCase() +
         ".jpg");
-    }
+    },
   },
   methods: {
     showSetting() {
       Modal.info({
         title: "当前配置",
         content: this.game_setting,
-        maskClosable: true
+        maskClosable: true,
       });
     },
     showHistory() {
       const modal = Modal.info({
         title: "历史信息",
         content: this.game_history,
-        maskClosable: true
+        maskClosable: true,
       });
       this.$refs.historyContent.scrollTop = this.$refs.historyContent.scrollHeight;
     },
@@ -212,7 +212,7 @@ export default {
     },
     onClickPlayer(pos) {
       if (this.game.status == 1401) {
-        gameApi.get("/sit?position=" + pos).then(res => {
+        gameApi.get("/sit?position=" + pos).then((res) => {
           if (res.status != 200) {
             this.$message.error("未知错误");
             console.log(res);
@@ -233,8 +233,8 @@ export default {
       } else {
         // mark players, modal
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
